@@ -1,0 +1,66 @@
+<%= link_to 'New Message', new_message_path, :class => 'btn btn-default' %>
+<h1>Sent Messages</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Message</th>
+      <th>Message detail</th>
+      <th>Sent by</th>
+      <th>Recieved by</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @sent_messages.each do |message| %>
+      <% if can? :read, message %>
+        <tr>
+          <td><%= message.message %></td>
+          <td><%= message.message_detail %></td>
+          <td><%= message.sender.username %></td>
+          <td><%= message.reciever.username %></td>
+          <td><%= link_to 'Show', message %></td>
+          <td><%= link_to 'Edit', edit_message_path(message) if can? :update, message %></td>
+          <td><%= link_to 'Destroy', message, method: :delete, data: { confirm: 'Are you sure?' } if can? :destroy, message %></td>
+        </tr>
+      <% end %>  
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<h1>Recieved Messages</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Message</th>
+      <th>Message detail</th>
+      <th>Sent by</th>
+      <th>Recieved by</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @recieved_messages.each do |message| %>
+      <% if can? :read, message %>
+        <tr>
+          <td><%= message.message %></td>
+          <td><%= message.message_detail %></td>
+          <td><%= message.sender.username %></td>
+          <td><%= message.reciever.username %></td>
+          <td><%= link_to 'Show', message %></td>
+          <td><%= link_to 'Edit', edit_message_path(message)  if can? :update, message %></td>
+          <td><%= link_to 'Destroy', message, method: :delete, data: { confirm: 'Are you sure?' }  if can? :destroy, message %></td>
+        </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+

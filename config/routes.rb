@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   resources :messages
   devise_for :users
 
-  get 'user', to: 'users#index'
+  get 'user', to: 'users#show'
 
   unauthenticated do
     devise_scope :user do

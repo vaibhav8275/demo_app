@@ -1,3 +1,6 @@
+<code>
+curl -H "Authorization: Token token=<%= current_user.auth_token %>" <%= url_for(action: 'show', controller: 'messages', only_path: false) %>.json
+</code>
 <p>
   <strong>Message:</strong>
   <%= @message.message %>

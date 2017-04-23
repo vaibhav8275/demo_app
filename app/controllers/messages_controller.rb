@@ -6,11 +6,29 @@ class MessagesController < ApplicationController
   def index
     @sent_messages = current_user.sent_messages
     @recieved_messages = current_user.recieved_messages
+    options = {}
+    sent_messages_serialization = ActiveModelSerializers::SerializableResource.new(@sent_messages, options)
+    options = {}
+    recieved_messages_serialization = ActiveModelSerializers::SerializableResource.new(@recieved_messages, options)
+    
+    respond_to do |format|
+      format.html
+      format.json { 
+                    render json: { 
+                      "sent_messages" => sent_messages_serialization.to_json ,
+                      "recieved_messages" => recieved_messages_serialization.to_json
+                    }.to_json
+                  }
+    end 
   end
 
   # GET /messages/1
   # GET /messages/1.json
   def show
+    respond_to do |format|
+      format.html
+      format.json { render json: @message }
+    end 
   end
 
   # GET /messages/new

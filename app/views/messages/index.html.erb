@@ -1,6 +1,6 @@
 <h1>Curl Command</h1>
 <code>
-curl -H "Authorization: Token token=<%= current_user.auth_token %>" http://localhost:3000/user.json
+curl -H "Authorization: Token token=<%= current_user.auth_token %>" <%= url_for(action: 'index', controller: 'messages', only_path: false) %>.json
 </code>
 
 <br/>

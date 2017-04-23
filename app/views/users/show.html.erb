@@ -1,7 +1,7 @@
 <h1>User Details</h1>
 <p>
 <code>
-curl -H "Authorization: Token token=<%= current_user.auth_token %>" http://localhost:3000/user.json
+curl -H "Authorization: Token token=<%= current_user.auth_token %>" <%= url_for(action: 'show', controller: 'users', only_path: false) %>.json
 </code>
 </p>
 

@@ -21,5 +21,5 @@ curl -H "Authorization: Token token=<%= current_user.auth_token %>" <%= url_for(
   <%= @message.reciever.username %>
 </p>
 
-<%= link_to 'Edit', edit_message_path(@message) %> |
+<%= (link_to 'Edit', edit_message_path(@message)) +  ' | '  if can? :update, @message %>
 <%= link_to 'Back', messages_path %>

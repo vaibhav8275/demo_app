@@ -6,9 +6,9 @@ class MessagesController < ApplicationController
   def index
     @sent_messages = current_user.sent_messages
     @recieved_messages = current_user.recieved_messages
+
     options = {}
     sent_messages_serialization = ActiveModelSerializers::SerializableResource.new(@sent_messages, options)
-    options = {}
     recieved_messages_serialization = ActiveModelSerializers::SerializableResource.new(@recieved_messages, options)
     
     respond_to do |format|
@@ -38,6 +38,7 @@ class MessagesController < ApplicationController
 
   # GET /messages/1/edit
   def edit
+    render 'shared/unauthorized' if !can? :update, @message
   end
 
   # POST /messages
@@ -60,13 +61,20 @@ class MessagesController < ApplicationController
   # PATCH/PUT /messages/1
   # PATCH/PUT /messages/1.json
   def update
-    respond_to do |format|
-      if @message.update(message_params)
-        format.html { redirect_to @message, notice: 'Message was successfully updated.' }
-        format.json { render :show, status: :ok, location: @message }
-      else
-        format.html { render :edit }
-        format.json { render json: @message.errors, status: :unprocessable_entity }
+    if can? :update, @message
+      respond_to do |format|
+        if @message.update(message_params)
+          format.html { redirect_to @message, notice: 'Message was successfully updated.' }
+          format.json { render :show, status: :ok, location: @message }
+        else
+          format.html { render :edit }
+          format.json { render json: @message.errors, status: :unprocessable_entity }
+        end
+      end
+    else
+      respond_to do |format|
+        format.html { render 'shared/unauthorized' }
+        format.json { render json: { "errors" => "You are not authorized to update this message." }.to_json } 
       end
     end
   end
@@ -74,10 +82,18 @@ class MessagesController < ApplicationController
   # DELETE /messages/1
   # DELETE /messages/1.json
   def destroy
-    @message.destroy
-    respond_to do |format|
-      format.html { redirect_to messages_url, notice: 'Message was successfully destroyed.' }
-      format.json { head :no_content }
+    puts "==============================================================destroy called"
+    if can? :destroy, @message
+      @message.destroy
+      respond_to do |format|
+        format.html { redirect_to messages_url, notice: 'Message was successfully destroyed.' }
+        format.json { head :no_content }
+      end
+    else
+      respond_to do |format|
+        format.html { render 'shared/unauthorized' }
+        format.json { render json: { "errors" => "You are not authorized to delete this message." }.to_json } 
+      end
     end
   end
 
